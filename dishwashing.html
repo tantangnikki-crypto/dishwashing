@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>🍽️ 碗家 · 情侣家务换算</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: linear-gradient(145deg, #fff9f0 0%, #ffe9d6 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      color: #4a3728;
+    }
+
+    .app {
+      max-width: 440px;
+      width: 100%;
+      background-color: rgba(255, 245, 235, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 48px;
+      box-shadow: 0 20px 40px rgba(200, 150, 100, 0.2), 0 8px 20px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+      padding: 24px 16px 28px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding: 0 8px;
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #b76e4b;
+      text-shadow: 0 2px 4px rgba(255, 220, 180, 0.8);
+    }
+
+    .title span {
+      font-size: 26px;
+    }
+
+    .love-icon {
+      font-size: 28px;
+      filter: drop-shadow(0 4px 6px rgba(224, 122, 95, 0.3));
+      animation: gentlePulse 2s infinite;
+    }
+
+    @keyframes gentlePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    /* 情侣卡片 */
+    .couple-zone {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .partner-card {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(4px);
+      border-radius: 32px;
+      padding: 16px 8px 14px;
+      text-align: center;
+      box-shadow: 0 6px 12px rgba(180, 130, 90, 0.12), inset 0 1px 0 #fff;
+      transition: transform 0.15s;
+      border: 1px solid rgba(255, 230, 210, 0.8);
+    }
+
+    .partner-card.him {
+      background: linear-gradient(145deg, #e4f2fe, #d9eaff);
+      border-color: #b8d6f0;
+    }
+
+    .partner-card.her {
+      background: linear-gradient(145deg, #ffe5e9, #ffd9e2);
+      border-color: #fbc4d0;
+    }
+
+    .avatar {
+      font-size: 38px;
+      line-height: 1;
+      margin-bottom: 4px;
+      display: inline-block;
+    }
+
+    .name {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #5a3e2b;
+    }
+
+    .count-badge {
+      background: #ffffffcc;
+      border-radius: 30px;
+      padding: 6px 4px;
+      display: inline-block;
+      width: 100%;
+      font-weight: 700;
+      font-size: 22px;
+      color: #4a2e1e;
+      box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.03);
+      margin-bottom: 10px;
+      border: 1px solid #fff;
+    }
+
+    .count-badge small {
+      font-size: 12px;
+      font-weight: 400;
+      opacity: 0.7;
+      margin-left: 2px;
+    }
+
+    /* 家务项目快捷按钮（每个角色下方） */
+    .chore-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+
+    .chore-btn {
+      background: white;
+      border: none;
+      border-radius: 30px;
+      padding: 8px 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #5a3e2b;
+      box-shadow: 0 3px 6px rgba(160, 120, 80, 0.1);
+      cursor: pointer;
+      transition: all 0.1s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      border: 1px solid #fff2e6;
+      -webkit-tap-highlight-color: transparent;
+      flex: 0 0 auto;
+    }
+
+    .chore-btn:active {
+      transform: scale(0.94);
+      box-shadow: 0 1px 3px rgba(160, 120, 80, 0.15);
+    }
+
+    .chore-btn .emoji {
+      font-size: 15px;
+    }
+
+    .chore-btn .multiplier {
+      background: #f0e1d6;
+      border-radius: 12px;
+      padding: 2px 6px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #8b5a3c;
+      margin-left: 2px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      margin-top: 4px;
+    }
+
+    .btn {
+      border: none;
+      background: white;
+      border-radius: 60px;
+      font-size: 18px;
+      font-weight: 600;
+      padding: 8px 0;
+      width: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(160, 120, 80, 0.15);
+      transition: all 0.12s ease;
+      color: #8b5a3c;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn:active {
+      transform: scale(0.92);
+    }
+
+    .btn.plus {
+      background: #fff1e6;
+      color: #b85e2e;
+      font-size: 22px;
+    }
+
+    .btn.minus {
+      background: #f5e9e0;
+      color: #a76f4a;
+    }
+
+    .btn:disabled {
+      opacity: 0.35;
+      transform: scale(0.96);
+      pointer-events: none;
+    }
+
+    /* 家务换算说明卡片 */
+    .legend {
+      background: #fffaf2e0;
+      backdrop-filter: blur(4px);
+      border-radius: 20px;
+      padding: 10px 14px;
+      margin: 12px 0 10px;
+      font-size: 12px;
+      color: #7b5e4a;
+      border: 1px dashed #e7cfbc;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px 14px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .legend-item .emoji {
+      font-size: 16px;
+    }
+
+    .legend-item .eq {
+      font-weight: 700;
+      color: #b85e2e;
+      margin: 0 2px;
+    }
+
+    .summary {
+      background: rgba(255, 240, 230, 0.7);
+      border-radius: 28px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(4px);
+      border: 1px solid #ffe2d0;
+      margin-top: 10px;
+    }
+
+    .total-label {
+      font-size: 15px;
+      font-weight: 500;
+      color: #7b5e4a;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .total-number {
+      font-size: 28px;
+      font-weight: 800;
+      color: #c1552b;
+      line-height: 1;
+      letter-spacing: -0.5px;
+      text-shadow: 0 2px 4px rgba(255, 180, 120, 0.3);
+    }
+
+    .total-number small {
+      font-size: 14px;
+      font-weight: 500;
+      color: #a4795a;
+      margin-left: 3px;
+    }
+
+    .reset-btn {
+      background: transparent;
+      border: 1px solid #dbbca4;
+      border-radius: 40px;
+      padding: 8px 14px;
+      font-size: 13px;
+      color: #8f6e58;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.15s;
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .reset-btn:active {
+      background: #e7d6c8;
+      transform: scale(0.96);
+    }
+
+    .footnote {
+      text-align: center;
+      font-size: 12px;
+      color: #bfa48e;
+      margin-top: 14px;
+      letter-spacing: 0.5px;
+    }
+
+    /* 小屏适应 */
+    @media (max-width: 380px) {
+      .chore-btn {
+        font-size: 11px;
+        padding: 6px 8px;
+      }
+      .chore-btn .emoji {
+        font-size: 13px;
+      }
+      .chore-btn .multiplier {
+        font-size: 9px;
+      }
+      .name {
+        font-size: 14px;
+      }
+      .count-badge {
+        font-size: 18px;
+      }
+      .btn {
+        width: 38px;
+        font-size: 16px;
+        padding: 6px 0;
+      }
+      .btn.plus {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="title">
+      <span>🍚</span> 碗家 <span>🧽</span>
+    </div>
+    <div class="love-icon">❤️</div>
+  </div>
+
+  <!-- 情侣双方卡片（含快捷家务按钮） -->
+  <div class="couple-zone">
+    <!-- 男生卡片 -->
+    <div class="partner-card him" id="cardHim">
+      <div class="avatar">👨‍🍳</div>
+      <div class="name">大厨 · 他</div>
+      <div class="count-badge" id="countHim">0 <small>碗</small></div>
+      <!-- 快捷家务按钮（他） -->
+      <div class="chore-buttons" id="choreButtonsHim">
+        <button class="chore-btn" data-chore="wash" data-multiplier="1" title="洗一个碗 = 1 碗">
+          <span class="emoji">🥣</span> 洗碗<span class="multiplier">1</span>
+        </button>
+        <button class="chore-btn" data-chore="cook" data-multiplier="2" title="做一个菜 = 2 碗">
+          <span class="emoji">🍳</span> 做菜<span class="multiplier">2</span>
+        </button>
+        <button class="chore-btn" data-chore="mop" data-multiplier="5" title="拖一个房间的地 = 5 碗">
+          <span class="emoji">🧹</span> 拖地<span class="multiplier">5</span>
+        </button>
+        <button class="chore-btn" data-chore="vacuum" data-multiplier="3" title="吸尘一个房间 = 3 碗">
+          <span class="emoji">🧽</span> 吸尘<span class="multiplier">3</span>
+        </button>
+        <button class="chore-btn" data-chore="laundry" data-multiplier="4" title="洗一桶衣服 = 4 碗">
+          <span class="emoji">🧺</span> 洗衣<span class="multiplier">4</span>
+        </button>
+      </div>
+      <!-- 手动加减（微调，以碗为单位） -->
+      <div class="btn-group">
+        <button class="btn minus" id="minusHim" aria-label="减少一碗" disabled>−</button>
+        <button class="btn plus" id="plusHim" aria-label="增加一碗">+</button>
+      </div>
+    </div>
+
+    <!-- 女生卡片 -->
+    <div class="partner-card her" id="cardHer">
+      <div class="avatar">👩‍🍳</div>
+      <div class="name">甜心 · 她</div>
+      <div class="count-badge" id="countHer">0 <small>碗</small></div>
+      <!-- 快捷家务按钮（她） -->
+      <div class="chore-buttons" id="choreButtonsHer">
+        <button class="chore-btn" data-chore="wash" data-multiplier="1" title="洗一个碗 = 1 碗">
+          <span class="emoji">🥣</span> 洗碗<span class="multiplier">1</span>
+        </button>
+        <button class="chore-btn" data-chore="cook" data-multiplier="2" title="做一个菜 = 2 碗">
+          <span class="emoji">🍳</span> 做菜<span class="multiplier">2</span>
+        </button>
+        <button class="chore-btn" data-chore="mop" data-multiplier="5" title="拖一个房间的地 = 5 碗">
+          <span class="emoji">🧹</span> 拖地<span class="multiplier">5</span>
+        </button>
+        <button class="chore-btn" data-chore="vacuum" data-multiplier="3" title="吸尘一个房间 = 3 碗">
+          <span class="emoji">🧽</span> 吸尘<span class="multiplier">3</span>
+        </button>
+        <button class="chore-btn" data-chore="laundry" data-multiplier="4" title="洗一桶衣服 = 4 碗">
+          <span class="emoji">🧺</span> 洗衣<span class="multiplier">4</span>
+        </button>
+      </div>
+      <div class="btn-group">
+        <button class="btn minus" id="minusHer" aria-label="减少一碗" disabled>−</button>
+        <button class="btn plus" id="plusHer" aria-label="增加一碗">+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 换算规则图例 -->
+  <div class="legend">
+    <div class="legend-item"><span class="emoji">🥣</span> 洗碗 <span class="eq">=</span> 1 碗</div>
+    <div class="legend-item"><span class="emoji">🍳</span> 做菜 <span class="eq">=</span> 2 碗</div>
+    <div class="legend-item"><span class="emoji">🧹</span> 拖地 <span class="eq">=</span> 5 碗</div>
+    <div class="legend-item"><span class="emoji">🧽</span> 吸尘 <span class="eq">=</span> 3 碗</div>
+    <div class="legend-item"><span class="emoji">🧺</span> 洗衣 <span class="eq">=</span> 4 碗</div>
+  </div>
+
+  <!-- 合计与重置 -->
+  <div class="summary">
+    <div class="total-label">
+      <span>🏆</span> 两人共洗
+    </div>
+    <div class="total-number" id="totalCount">0 <small>碗</small></div>
+    <button class="reset-btn" id="resetBtn">
+      <span>🧹</span> 清零
+    </button>
+  </div>
+
+  <div class="footnote">
+    ❤️ 一起做家务，爱意满满 ❤️
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ---- 存储键名 ----
+    const STORAGE_KEY = 'couple_chore_bowl_counts_v2';
+
+    // ---- 状态 ----
+    let himBowlCount = 0;   // 他的碗数（家务换算后）
+    let herBowlCount = 0;   // 她的碗数
+
+    // ---- DOM 元素 ----
+    const countHimEl = document.getElementById('countHim');
+    const countHerEl = document.getElementById('countHer');
+    const totalCountEl = document.getElementById('totalCount');
+    const minusHimBtn = document.getElementById('minusHim');
+    const plusHimBtn = document.getElementById('plusHim');
+    const minusHerBtn = document.getElementById('minusHer');
+    const plusHerBtn = document.getElementById('plusHer');
+    const resetBtn = document.getElementById('resetBtn');
+
+    // ---- 加载存储 ----
+    function loadFromStorage() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const data = JSON.parse(saved);
+          himBowlCount = Number(data.him) || 0;
+          herBowlCount = Number(data.her) || 0;
+        } else {
+          himBowlCount = 0;
+          herBowlCount = 0;
+        }
+      } catch (e) {
+        console.warn('读取存储失败，使用默认值');
+        himBowlCount = 0;
+        herBowlCount = 0;
+      }
+    }
+
+    // ---- 保存存储 ----
+    function saveToStorage() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          him: himBowlCount,
+          her: herBowlCount
+        }));
+      } catch (e) {
+        console.warn('存储失败');
+      }
+    }
+
+    // ---- 更新 UI ----
+    function updateUI() {
+      // 更新个人计数 (显示为碗数)
+      countHimEl.innerHTML = `${himBowlCount} <small>碗</small>`;
+      countHerEl.innerHTML = `${herBowlCount} <small>碗</small>`;
+
+      // 更新总碗数
+      const total = himBowlCount + herBowlCount;
+      totalCountEl.innerHTML = `${total} <small>碗</small>`;
+
+      // 根据数值控制“减少”按钮的禁用状态
+      minusHimBtn.disabled = himBowlCount <= 0;
+      minusHerBtn.disabled = herBowlCount <= 0;
+    }
+
+    // ---- 通用增加碗数 (指定人物) ----
+    function addBowls(person, amount) {
+      if (amount <= 0) return;
+      if (person === 'him') {
+        himBowlCount += amount;
+      } else {
+        herBowlCount += amount;
+      }
+      updateUI();
+      saveToStorage();
+      // 轻微震动反馈
+      if (navigator.vibrate) navigator.vibrate(amount > 2 ? 20 : 10);
+    }
+
+    // ---- 通用减少碗数 (指定人物，至少为0) ----
+    function subtractBowls(person, amount = 1) {
+      if (person === 'him') {
+        if (himBowlCount <= 0) return;
+        himBowlCount = Math.max(0, himBowlCount - amount);
+      } else {
+        if (herBowlCount <= 0) return;
+        herBowlCount = Math.max(0, herBowlCount - amount);
+      }
+      updateUI();
+      saveToStorage();
+      if (navigator.vibrate) navigator.vibrate(10);
+    }
+
+    // ---- 重置所有计数 ----
+    function resetAll() {
+      if (himBowlCount === 0 && herBowlCount === 0) return;
+      himBowlCount = 0;
+      herBowlCount = 0;
+      updateUI();
+      saveToStorage();
+      if (navigator.vibrate) navigator.vibrate([20, 30, 20]);
+    }
+
+    // ---- 绑定快捷家务按钮 ----
+    function bindChoreButtons() {
+      // 为每个卡片内的 .chore-btn 绑定事件，通过父级容器区分“他”和“她”
+      const choreButtonsHim = document.querySelectorAll('#choreButtonsHim .chore-btn');
+      const choreButtonsHer = document.querySelectorAll('#choreButtonsHer .chore-btn');
+
+      choreButtonsHim.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const multiplier = Number(btn.dataset.multiplier) || 1;
+          addBowls('him', multiplier);
+        });
+      });
+
+      choreButtonsHer.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const multiplier = Number(btn.dataset.multiplier) || 1;
+          addBowls('her', multiplier);
+        });
+      });
+    }
+
+    // ---- 绑定手动加减按钮 ----
+    function bindManualButtons() {
+      plusHimBtn.addEventListener('click', () => addBowls('him', 1));
+      minusHimBtn.addEventListener('click', () => subtractBowls('him', 1));
+      plusHerBtn.addEventListener('click', () => addBowls('her', 1));
+      minusHerBtn.addEventListener('click', () => subtractBowls('her', 1));
+      resetBtn.addEventListener('click', resetAll);
+    }
+
+    // ---- 阻止移动端触摸时的一些默认行为（如双击缩放） ----
+    function preventDefaultTouch() {
+      const allButtons = document.querySelectorAll('button');
+      allButtons.forEach(btn => {
+        btn.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+        }, { passive: false });
+      });
+    }
+
+    // ---- 初始化 ----
+    function init() {
+      loadFromStorage();
+      updateUI();
+      bindChoreButtons();
+      bindManualButtons();
+      preventDefaultTouch();
+    }
+
+    // 页面加载
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+    // 多标签页同步
+    window.addEventListener('storage', (e) => {
+      if (e.key === STORAGE_KEY) {
+        loadFromStorage();
+        updateUI();
+      }
+    });
+  })();
+</script>
+</body>
+</html>
