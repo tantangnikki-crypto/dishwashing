@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>🍽️ 碗家 · 情侣家务</title>
+  <style>
+    /* 全局温馨风格 */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: linear-gradient(145deg, #fff9f0 0%, #ffe9d6 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      color: #4a3728;
+    }
+
+    .app {
+      max-width: 420px;
+      width: 100%;
+      background-color: rgba(255, 245, 235, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 48px;
+      box-shadow: 0 20px 40px rgba(200, 150, 100, 0.2), 0 8px 20px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+      padding: 28px 20px 32px;
+      transition: all 0.2s;
+    }
+
+    /* 头部区域 */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding: 0 8px;
+    }
+
+    .title {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #b76e4b;
+      text-shadow: 0 2px 4px rgba(255, 220, 180, 0.8);
+    }
+
+    .title span {
+      font-size: 28px;
+    }
+
+    .love-icon {
+      font-size: 30px;
+      filter: drop-shadow(0 4px 6px rgba(224, 122, 95, 0.3));
+      animation: gentlePulse 2s infinite;
+    }
+
+    @keyframes gentlePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    /* 情侣卡片对战区 */
+    .couple-zone {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .partner-card {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(4px);
+      border-radius: 36px;
+      padding: 20px 10px 18px;
+      text-align: center;
+      box-shadow: 0 6px 12px rgba(180, 130, 90, 0.12), inset 0 1px 0 #fff;
+      transition: transform 0.15s, box-shadow 0.2s;
+      border: 1px solid rgba(255, 230, 210, 0.8);
+    }
+
+    .partner-card:active {
+      transform: scale(0.97);
+    }
+
+    .partner-card.him {
+      background: linear-gradient(145deg, #e4f2fe, #d9eaff);
+      border-color: #b8d6f0;
+    }
+
+    .partner-card.her {
+      background: linear-gradient(145deg, #ffe5e9, #ffd9e2);
+      border-color: #fbc4d0;
+    }
+
+    .avatar {
+      font-size: 44px;
+      line-height: 1;
+      margin-bottom: 6px;
+      display: inline-block;
+      filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.05));
+    }
+
+    .name {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #5a3e2b;
+    }
+
+    .count-badge {
+      background: #ffffffcc;
+      border-radius: 40px;
+      padding: 8px 4px;
+      display: inline-block;
+      width: 100%;
+      font-weight: 700;
+      font-size: 24px;
+      color: #4a2e1e;
+      box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.03);
+      margin-bottom: 14px;
+      border: 1px solid #fff;
+    }
+
+    .count-badge small {
+      font-size: 14px;
+      font-weight: 400;
+      opacity: 0.7;
+      margin-left: 4px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .btn {
+      border: none;
+      background: white;
+      border-radius: 60px;
+      font-size: 20px;
+      font-weight: 600;
+      padding: 10px 0;
+      width: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(160, 120, 80, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+      transition: all 0.12s ease;
+      color: #8b5a3c;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn:active {
+      transform: scale(0.92);
+      box-shadow: 0 2px 4px rgba(160, 120, 80, 0.1);
+    }
+
+    .btn.plus {
+      background: #fff1e6;
+      color: #b85e2e;
+      font-size: 26px;
+      font-weight: 500;
+    }
+
+    .btn.minus {
+      background: #f5e9e0;
+      color: #a76f4a;
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      transform: scale(0.96);
+      pointer-events: none;
+    }
+
+    /* 洗碗单位说明 */
+    .unit-tip {
+      text-align: center;
+      font-size: 13px;
+      color: #ac8b72;
+      margin-bottom: 18px;
+      letter-spacing: 0.4px;
+      background: rgba(255, 250, 240, 0.8);
+      padding: 8px;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      backdrop-filter: blur(4px);
+      border: 1px dashed #e7cfbc;
+    }
+
+    .unit-tip span {
+      font-size: 18px;
+    }
+
+    /* 底部历史/总计 */
+    .summary {
+      background: rgba(255, 240, 230, 0.7);
+      border-radius: 30px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(4px);
+      border: 1px solid #ffe2d0;
+      margin-bottom: 12px;
+    }
+
+    .total-label {
+      font-size: 15px;
+      font-weight: 500;
+      color: #7b5e4a;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .total-number {
+      font-size: 30px;
+      font-weight: 800;
+      color: #c1552b;
+      line-height: 1;
+      letter-spacing: -0.5px;
+      text-shadow: 0 2px 4px rgba(255, 180, 120, 0.3);
+    }
+
+    .total-number small {
+      font-size: 16px;
+      font-weight: 500;
+      color: #a4795a;
+      margin-left: 4px;
+    }
+
+    /* 重置按钮 */
+    .reset-btn {
+      background: transparent;
+      border: 1px solid #dbbca4;
+      border-radius: 40px;
+      padding: 8px 16px;
+      font-size: 14px;
+      color: #8f6e58;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.15s;
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .reset-btn:active {
+      background: #e7d6c8;
+      transform: scale(0.96);
+    }
+
+    /* 小提示 */
+    .footnote {
+      text-align: center;
+      font-size: 12px;
+      color: #bfa48e;
+      margin-top: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    /* 禁用按钮样式 */
+    .btn:disabled {
+      opacity: 0.35;
+      transform: scale(0.96);
+      pointer-events: none;
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <!-- 标题 -->
+  <div class="header">
+    <div class="title">
+      <span>🍚</span> 碗家 <span>🧽</span>
+    </div>
+    <div class="love-icon">❤️</div>
+  </div>
+
+  <!-- 情侣双方卡片 -->
+  <div class="couple-zone">
+    <!-- 男生卡片 -->
+    <div class="partner-card him" id="cardHim">
+      <div class="avatar">👨‍🍳</div>
+      <div class="name">大厨 · 他</div>
+      <div class="count-badge" id="countHim">0 <small>碗</small></div>
+      <div class="btn-group">
+        <button class="btn minus" id="minusHim" aria-label="减少一碗" disabled>−</button>
+        <button class="btn plus" id="plusHim" aria-label="增加一碗">+</button>
+      </div>
+    </div>
+
+    <!-- 女生卡片 -->
+    <div class="partner-card her" id="cardHer">
+      <div class="avatar">👩‍🍳</div>
+      <div class="name">甜心 · 她</div>
+      <div class="count-badge" id="countHer">0 <small>碗</small></div>
+      <div class="btn-group">
+        <button class="btn minus" id="minusHer" aria-label="减少一碗" disabled>−</button>
+        <button class="btn plus" id="plusHer" aria-label="增加一碗">+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 单位提示：洗一个碗 = 1 次家务 -->
+  <div class="unit-tip">
+    <span>🥣</span> 1 个碗 = 1 次家务 · 最小单位 <span>✨</span>
+  </div>
+
+  <!-- 合计与重置 -->
+  <div class="summary">
+    <div class="total-label">
+      <span>🏆</span> 两人共洗
+    </div>
+    <div class="total-number" id="totalCount">0 <small>碗</small></div>
+    <button class="reset-btn" id="resetBtn">
+      <span>🧹</span> 清零
+    </button>
+  </div>
+
+  <div class="footnote">
+    ❤️ 一起洗碗，爱意满满 ❤️
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ---- 状态管理 ----
+    // 使用 localStorage 持久化，保证关闭页面后数据不丢失
+    const STORAGE_KEY = 'couple_dishwashing_counts';
+
+    // 从 localStorage 读取数据，若无则初始化
+    let himCount = 0;
+    let herCount = 0;
+
+    // 尝试加载保存的数据
+    function loadFromStorage() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const data = JSON.parse(saved);
+          himCount = Number(data.him) || 0;
+          herCount = Number(data.her) || 0;
+        } else {
+          // 默认初始值：0 (也可以设置成0，保持干净)
+          himCount = 0;
+          herCount = 0;
+        }
+      } catch (e) {
+        console.warn('读取存储失败，使用默认值');
+        himCount = 0;
+        herCount = 0;
+      }
+    }
+
+    // 保存数据到 localStorage
+    function saveToStorage() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          him: himCount,
+          her: herCount
+        }));
+      } catch (e) {
+        console.warn('存储失败，可能无痕模式');
+      }
+    }
+
+    // ---- DOM 元素 ----
+    const countHimEl = document.getElementById('countHim');
+    const countHerEl = document.getElementById('countHer');
+    const totalCountEl = document.getElementById('totalCount');
+    const minusHimBtn = document.getElementById('minusHim');
+    const plusHimBtn = document.getElementById('plusHim');
+    const minusHerBtn = document.getElementById('minusHer');
+    const plusHerBtn = document.getElementById('plusHer');
+    const resetBtn = document.getElementById('resetBtn');
+
+    // ---- 更新 UI ----
+    function updateUI() {
+      // 更新个人计数 (带单位“碗”)
+      countHimEl.innerHTML = `${himCount} <small>碗</small>`;
+      countHerEl.innerHTML = `${herCount} <small>碗</small>`;
+
+      // 更新总碗数
+      const total = himCount + herCount;
+      totalCountEl.innerHTML = `${total} <small>碗</small>`;
+
+      // 根据数值控制“减少”按钮的禁用状态 (不能减到负数)
+      minusHimBtn.disabled = himCount <= 0;
+      minusHerBtn.disabled = herCount <= 0;
+
+      // 可选：给卡片加一点触感反馈或者动态效果（但不需要）
+    }
+
+    // ---- 数据操作 ----
+    function incrementHim() {
+      himCount += 1;
+      updateUI();
+      saveToStorage();
+      // 轻微触感反馈 (如果支持)
+      if (navigator.vibrate) navigator.vibrate(10);
+    }
+
+    function decrementHim() {
+      if (himCount <= 0) return; // 已经禁用，安全判断
+      himCount -= 1;
+      updateUI();
+      saveToStorage();
+      if (navigator.vibrate) navigator.vibrate(10);
+    }
+
+    function incrementHer() {
+      herCount += 1;
+      updateUI();
+      saveToStorage();
+      if (navigator.vibrate) navigator.vibrate(10);
+    }
+
+    function decrementHer() {
+      if (herCount <= 0) return;
+      herCount -= 1;
+      updateUI();
+      saveToStorage();
+      if (navigator.vibrate) navigator.vibrate(10);
+    }
+
+    // 重置所有计数（清零）
+    function resetAll() {
+      if (himCount === 0 && herCount === 0) return; // 没变化
+      // 添加一点确认感，但不需要弹出对话框（保持轻快）
+      // 对于情侣小工具，直接清零并且给一个小反馈即可
+      himCount = 0;
+      herCount = 0;
+      updateUI();
+      saveToStorage();
+      // 震动稍微长一点表示重置
+      if (navigator.vibrate) navigator.vibrate([20, 30, 20]);
+    }
+
+    // ---- 事件绑定 ----
+    function bindEvents() {
+      plusHimBtn.addEventListener('click', incrementHim);
+      minusHimBtn.addEventListener('click', decrementHim);
+      plusHerBtn.addEventListener('click', incrementHer);
+      minusHerBtn.addEventListener('click', decrementHer);
+      resetBtn.addEventListener('click', resetAll);
+
+      // 防止双击/双触缩放 (移动端优化)
+      const allButtons = [plusHimBtn, minusHimBtn, plusHerBtn, minusHerBtn, resetBtn];
+      allButtons.forEach(btn => {
+        btn.addEventListener('touchstart', (e) => {
+          // 阻止默认的长按菜单/缩放等
+          e.preventDefault();
+        }, { passive: false });
+      });
+    }
+
+    // ---- 初始化 ----
+    function init() {
+      loadFromStorage();       // 读取本地保存
+      updateUI();             // 更新界面
+      bindEvents();           // 绑定事件
+    }
+
+    // 页面加载后执行
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+    // 监听存储事件，如果同一用户打开多个标签页，保持同步（可选）
+    window.addEventListener('storage', (e) => {
+      if (e.key === STORAGE_KEY) {
+        loadFromStorage();
+        updateUI();
+      }
+    });
+  })();
+</script>
+</body>
+</html>
